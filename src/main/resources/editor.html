@@ -1,0 +1,100 @@
+<html lang="en">
+
+<head>
+    <style>
+        #editor {
+            width: 99%;
+            height: 99%
+        }
+
+        .goog-te-banner-frame {
+            display: none
+        }
+    </style>
+</head>
+
+<body id="body">
+    <!--编辑器,双击默认进入编辑模式-->
+    <div id="editor" name="editor" contenteditable="true" style="color: black;font-weight:bold; ">
+    </div>
+
+    <button onclick="cleartrans()" style='position: fixed; bottom: 230px; right: 40px;z-index: 100;'>显示原文</button>
+    <!--把button放在右下角，这个是可以随意修改的，你可以改成一个链接一个图片之类的-->
+    <div id="google_translate_element" style="position:fixed;bottom:20px;right:20px;z-index:2000;opacity:0.5"></div>
+    <script>
+        //清除翻译后自动进入编辑模式
+        function cleartrans() {
+            contenteditable(true);
+            delCookie("googtrans");
+            document.getElementById(":2.container").contentWindow.document.getElementById(":2.restore").click();//模拟点击显示原始
+        }
+        function resizeFixBody() {
+            setTimeout(function () {
+                document.body.style = "position: relative; min-height: 100%;"
+            }, 2000);
+        }
+
+        function contenteditable(enable) {
+            document.getElementById('editor').setAttribute('contenteditable', enable);
+
+        }
+
+        function delCookie(name) {
+            var Days = 30;
+            var exp = new Date();
+            exp.setTime(exp.getTime() - Days * 24 * 60 * 60 * 30);
+
+            //这里一定要注意，如果直接访问ip的话，不用注明域名domain
+            //但访问的是域名例如www.baidu.com时，翻译插件的cookie同时存在于一级和二级域名中
+            //即删除翻译cookie时要把domain=www.baidu.com和domain=.baidu.com两个cookie一起删除才行
+            var domain = document.domain;
+            var domainIsIp = false;
+            var dd = domain.split(".");
+            if (dd.length == 4) {
+                domainIsIp = true;
+            }
+            document.cookie = name + "='';path=/;expires=" + exp.toUTCString();
+            if (domainIsIp == false) {
+                domain = "." + dd[1] + "." + dd[2];
+                document.cookie = name + "='';domain=" + domain + ";expires=" + exp.toGMTString() + ";path=/";
+            }
+        }
+    </script>
+    <script>
+        function setCaret() {
+            var el = document.getElementById("editable")
+            var range = document.createRange()
+            var sel = window.getSelection()
+
+            range.setStart(el.childNodes[2], 5)
+            range.collapse(true)
+
+            sel.removeAllRanges()
+            sel.addRange(range)
+        }
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement(
+                {
+                    //这个参数不起作用，看文章底部更新，翻译面板的语言
+                    //pageLanguage: 'zh-CN',
+                    //这个是你需要翻译的语言，比如你只需要翻译成越南和英语，这里就只写en,vi
+                    includedLanguages: 'en,zh-CN,hr,cs,da,nl,fr,de,el,iw,hu,ga,it,ja,ko,pt,ro,ru,sr,es,th,vi',
+                    //选择语言的样式，这个是面板，还有下拉框的样式，具体的记不到了，找不到api~~
+                    layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                    //自动显示翻译横幅，就是翻译后顶部出现的那个，有点丑，这个属性没有用的话，请看文章底部的其他方法
+                    autoDisplay: true,
+                    //还有些其他参数，由于原插件不再维护，找不到详细api了，将就了，实在不行直接上dom操作
+                },
+                'google_translate_element'//触发按钮的id
+            );
+        }
+    </script>
+    <script src="https://translate.google.cn/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script>
+        //Base64解码库
+        !function (e, t) { "object" == typeof exports && "undefined" != typeof module ? module.exports = t() : "function" == typeof define && define.amd ? define(t) : function () { const r = e.Base64, o = t(); o.noConflict = () => (e.Base64 = r, o), e.Meteor && (Base64 = o), e.Base64 = o }() }("undefined" != typeof self ? self : "undefined" != typeof window ? window : "undefined" != typeof global ? global : this, (function () { "use strict"; const e = "3.6.0", t = "function" == typeof atob, r = "function" == typeof btoa, o = "function" == typeof Buffer, n = "function" == typeof TextDecoder ? new TextDecoder : void 0, a = "function" == typeof TextEncoder ? new TextEncoder : void 0, f = [..."ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/="], i = (e => { let t = {}; return e.forEach(((e, r) => t[e] = r)), t })(f), c = /^(?:[A-Za-z\d+\/]{4})*?(?:[A-Za-z\d+\/]{2}(?:==)?|[A-Za-z\d+\/]{3}=?)?$/, u = String.fromCharCode.bind(String), s = "function" == typeof Uint8Array.from ? Uint8Array.from.bind(Uint8Array) : (e, t = (e => e)) => new Uint8Array(Array.prototype.slice.call(e, 0).map(t)), d = e => e.replace(/[+\/]/g, (e => "+" == e ? "-" : "_")).replace(/=+$/m, ""), l = e => e.replace(/[^A-Za-z0-9\+\/]/g, ""), h = e => { let t, r, o, n, a = ""; const i = e.length % 3; for (let i = 0; i < e.length;) { if ((r = e.charCodeAt(i++)) > 255 || (o = e.charCodeAt(i++)) > 255 || (n = e.charCodeAt(i++)) > 255) throw new TypeError("invalid character found"); t = r << 16 | o << 8 | n, a += f[t >> 18 & 63] + f[t >> 12 & 63] + f[t >> 6 & 63] + f[63 & t] } return i ? a.slice(0, i - 3) + "===".substring(i) : a }, p = r ? e => btoa(e) : o ? e => Buffer.from(e, "binary").toString("base64") : h, y = o ? e => Buffer.from(e).toString("base64") : e => { let t = []; for (let r = 0, o = e.length; r < o; r += 4096)t.push(u.apply(null, e.subarray(r, r + 4096))); return p(t.join("")) }, A = (e, t = !1) => t ? d(y(e)) : y(e), b = e => { if (e.length < 2) return (t = e.charCodeAt(0)) < 128 ? e : t < 2048 ? u(192 | t >>> 6) + u(128 | 63 & t) : u(224 | t >>> 12 & 15) + u(128 | t >>> 6 & 63) + u(128 | 63 & t); var t = 65536 + 1024 * (e.charCodeAt(0) - 55296) + (e.charCodeAt(1) - 56320); return u(240 | t >>> 18 & 7) + u(128 | t >>> 12 & 63) + u(128 | t >>> 6 & 63) + u(128 | 63 & t) }, g = /[\uD800-\uDBFF][\uDC00-\uDFFFF]|[^\x00-\x7F]/g, B = e => e.replace(g, b), x = o ? e => Buffer.from(e, "utf8").toString("base64") : a ? e => y(a.encode(e)) : e => p(B(e)), C = (e, t = !1) => t ? d(x(e)) : x(e), m = e => C(e, !0), U = /[\xC0-\xDF][\x80-\xBF]|[\xE0-\xEF][\x80-\xBF]{2}|[\xF0-\xF7][\x80-\xBF]{3}/g, F = e => { switch (e.length) { case 4: var t = ((7 & e.charCodeAt(0)) << 18 | (63 & e.charCodeAt(1)) << 12 | (63 & e.charCodeAt(2)) << 6 | 63 & e.charCodeAt(3)) - 65536; return u(55296 + (t >>> 10)) + u(56320 + (1023 & t)); case 3: return u((15 & e.charCodeAt(0)) << 12 | (63 & e.charCodeAt(1)) << 6 | 63 & e.charCodeAt(2)); default: return u((31 & e.charCodeAt(0)) << 6 | 63 & e.charCodeAt(1)) } }, w = e => e.replace(U, F), S = e => { if (e = e.replace(/\s+/g, ""), !c.test(e)) throw new TypeError("malformed base64."); e += "==".slice(2 - (3 & e.length)); let t, r, o, n = ""; for (let a = 0; a < e.length;)t = i[e.charAt(a++)] << 18 | i[e.charAt(a++)] << 12 | (r = i[e.charAt(a++)]) << 6 | (o = i[e.charAt(a++)]), n += 64 === r ? u(t >> 16 & 255) : 64 === o ? u(t >> 16 & 255, t >> 8 & 255) : u(t >> 16 & 255, t >> 8 & 255, 255 & t); return n }, E = t ? e => atob(l(e)) : o ? e => Buffer.from(e, "base64").toString("binary") : S, v = o ? e => s(Buffer.from(e, "base64")) : e => s(E(e), (e => e.charCodeAt(0))), D = e => v(z(e)), R = o ? e => Buffer.from(e, "base64").toString("utf8") : n ? e => n.decode(v(e)) : e => w(E(e)), z = e => l(e.replace(/[-_]/g, (e => "-" == e ? "+" : "/"))), T = e => R(z(e)), Z = e => ({ value: e, enumerable: !1, writable: !0, configurable: !0 }), j = function () { const e = (e, t) => Object.defineProperty(String.prototype, e, Z(t)); e("fromBase64", (function () { return T(this) })), e("toBase64", (function (e) { return C(this, e) })), e("toBase64URI", (function () { return C(this, !0) })), e("toBase64URL", (function () { return C(this, !0) })), e("toUint8Array", (function () { return D(this) })) }, I = function () { const e = (e, t) => Object.defineProperty(Uint8Array.prototype, e, Z(t)); e("toBase64", (function (e) { return A(this, e) })), e("toBase64URI", (function () { return A(this, !0) })), e("toBase64URL", (function () { return A(this, !0) })) }, O = { version: e, VERSION: "3.6.0", atob: E, atobPolyfill: S, btoa: p, btoaPolyfill: h, fromBase64: T, toBase64: C, encode: C, encodeURI: m, encodeURL: m, utob: B, btou: w, decode: T, isValid: e => { if ("string" != typeof e) return !1; const t = e.replace(/\s+/g, "").replace(/=+$/, ""); return !/[^\s0-9a-zA-Z\+/]/.test(t) || !/[^\s0-9a-zA-Z\-_]/.test(t) }, fromUint8Array: A, toUint8Array: D, extendString: j, extendUint8Array: I, extendBuiltins: () => { j(), I() }, Base64: {} }; return Object.keys(O).forEach((e => O.Base64[e] = O[e])), O }));
+//# sourceMappingURL=/sm/8bca8602e2256d240cef904e1c1df432ccfdd2a2a73f6911c60be79e526e3e1e.map
+    </script>
+</body>
+
+</html>
