@@ -4,17 +4,17 @@ Involves string, time, number, swing, javafx, proxy server, http client, file, c
 
 The role of each package:
 
-code - encoding and decoding
-crypt - encrypt and decrypt
-Data list/map and other related java basic data manipulation tool library
-db - provides an ORM database operation framework based on anima's sql generation
-function - Functional programming related database
-io - Local file read/write/compress/decompress related functions
-net -http programming and proxyServer
-reflect - functions related to common reflection operations
-shell - system utility and translation api
-swing - swingGui programming related tools
-javamod - thread pool/time pool, multi-thread synchronization related tools
+- code - encoding and decoding
+- crypt - encrypt and decrypt
+- Data list/map and other related java basic data manipulation tool library
+- db - provides an ORM database operation framework based on anima's sql generation
+- function - Functional programming related database
+- io - Local file read/write/compress/decompress related functions
+- net -http programming and proxyServer
+- reflect - functions related to common reflection operations
+- shell - system utility and translation api
+- swing - swingGui programming related tools
+- javamod - thread pool/time pool, multi-thread synchronization related tools
 
 ## 中文
 
