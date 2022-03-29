@@ -14,7 +14,7 @@ The role of each package:
 - reflect - functions related to common reflection operations
 - shell - system utility and translation api
 - swing - swingGui programming related tools
-- javamod - thread pool/time pool, multi-thread synchronization related tools
+- thread - thread pool/time pool, multi-thread synchronization related tools
 
 ## 中文
 
@@ -31,4 +31,4 @@ The role of each package:
 - reflect -常用反射操作相关的函数
 - shell -系统实用的工具和翻译api
 - swing - swingGui编程相关工具
-- javamod - 线程池/时间池,多线程同步相关的工具
+- thread - 线程池/时间池,多线程同步相关的工具
