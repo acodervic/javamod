@@ -8,7 +8,7 @@ The role of each package:
 - crypt - encrypt and decrypt
 - Data list/map and other related java basic data manipulation tool library
 - db - provides an ORM database operation framework based on anima's sql generation
-- function - Functional programming related database
+- function - Functional programming related functions
 - io - Local file read/write/compress/decompress related functions
 - net -http programming and proxyServer
 - reflect - functions related to common reflection operations
@@ -25,7 +25,7 @@ The role of each package:
 - crypt -加密解密
 - data  list/map等相关的java基本数据操作工具库
 - db   - 提供了一个基于anima的sql生成的ORM数据库操作框架
-- function - 函数式编程相关的数据库
+- function - 函数式编程相关的功能
 - io - 本地文件读写/压缩解压缩相关功能
 - net -http编程以及proxyServer
 - reflect -常用反射操作相关的函数
