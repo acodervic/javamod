@@ -366,7 +366,7 @@ public class SystemUtil {
         return chinses;
     }
 
-    static TransApi baiduTran = new TransApi("20200610000491698", "qJw_J81bkOPrenmzMKBN");
+    static TransApi baiduTran = new TransApi("xxxxx", "xxxxx");
 
     /**
      * 百度翻译
